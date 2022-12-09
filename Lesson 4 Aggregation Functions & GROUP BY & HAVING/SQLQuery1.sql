@@ -1,0 +1,64 @@
+CREATE DATABASE Academy
+
+USE Academy
+
+
+CREATE TABLE Students(
+	Id int PRIMARY KEY IDENTITY(1, 1),
+	FirstName nvarchar(25) NOT NULL,
+	LastName nvarchar(25) NOT NULL DEFAULT('UNKNOWN'),
+	UserName nvarchar(20) NOT NULL UNIQUE,
+	Age int NOT NULL CHECK(Age > 17)
+)
+
+
+
+
+
+-- PRIMARY KEY
+
+ALTER TABLE Students
+DROP CONSTRAINT PK__Students__3214EC07A92B2E5B
+
+
+ALTER TABLE Students
+ADD CONSTRAINT PK__Students__Id PRIMARY KEY(Id)
+
+
+
+
+
+-- UNIQUE
+
+ALTER TABLE Students
+DROP CONSTRAINT UQ__Students__C9F28456084AC5E4
+
+
+ALTER TABLE Students
+ADD CONSTRAINT UQ__Students__UserName UNIQUE(UserName)
+
+
+
+
+
+-- CHECK
+
+ALTER TABLE Students
+DROP CONSTRAINT CK__Students__Age__267ABA7A
+
+
+ALTER TABLE Students
+ADD CONSTRAINT CK__Students__Age CHECK(Age > 17)
+
+
+
+
+
+-- DEFAULT
+
+ALTER TABLE Students
+DROP CONSTRAINT DF__Students__LastNa__25869641
+
+
+ALTER TABLE Students
+ADD CONSTRAINT DF__Students__LastName DEFAULT('UNKNOWN') FOR LastName
