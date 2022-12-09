@@ -42,3 +42,9 @@ FROM Books
 
 
 SELECT * FROM Books
+
+
+
+DECLARE @average AS int = 0
+SELECT @average = COUNT(Price) FROM Books
+PRINT @average
