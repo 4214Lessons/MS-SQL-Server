@@ -253,7 +253,28 @@ WHERE Id_Press = ANY(SELECT Id FROM Press WHERE [Name] IN ('BHV', 'BİNOM'))
 
 
 
+-- 4. Select the names of all students who took books between January 1, 2001 and the current date.
+-- 4. Yanvarın 1-i 2001ci il və bu gün arasında kitabxanadan kitab götürən bütün tələbələrin adlarını ekrana çıxarın
+
+
+SELECT * FROM Students
+WHERE Id = SOME(SELECT Id_Student FROM S_Cards WHERE DateOut BETWEEN '2001-01-01' AND SYSDATETIME())
 
 
 
 
+
+
+
+
+
+-- 6. Display information about authors whose average volume of books (in pages) is more than 600 pages.
+-- 6. Yazdığı bütün kitabları nəzərə aldıqda, orta səhifə sayı 600dən çox olan Yazıçılar haqqında məlumat çıxarın.
+
+
+SELECT * FROM Authors
+WHERE Id = ANY(
+	SELECT Id_Author FROM Books
+	GROUP BY Id_Author
+	HAVING AVG(Pages) > 600
+)
