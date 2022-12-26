@@ -1,24 +1,48 @@
---SELECT * FROM Books
---WHERE Id = 95
+--CREATE PROCEDURE usp_GetErrorInfo  
+--AS  
+--SELECT  
+--    ERROR_NUMBER() AS ErrorNumber  
+--    ,ERROR_SEVERITY() AS ErrorSeverity  
+--    ,ERROR_STATE() AS ErrorState  
+--    ,ERROR_PROCEDURE() AS ErrorProcedure  
+--    ,ERROR_LINE() AS ErrorLine  
+--    ,ERROR_MESSAGE() AS ErrorMessage 
+--GO  
+  
+--BEGIN TRY  
+--    -- Generate divide-by-zero error.  
+--    SELECT 1/0 
+--END TRY  
+--BEGIN CATCH  
+--    -- Execute error retrieval routine.  
+--    EXECUTE usp_GetErrorInfo 
+--END CATCH
 
---SET STATISTICS IO ON
---SET STATISTICS TIME ON
 
+
+SET STATISTICS IO OFF
+SET STATISTICS TIME OFF
 
 
 CREATE DATABASE Test
-GO
 
 
 USE Test
-GO
+
+
+
+
 
 
 CREATE TABLE dbo.TableInHeap ( 
 	Id INT NOT NULL,
 	Filler1 CHAR(36) NOT NULL,
 	Filler2 CHAR(216) NOT NULL 
-); 
+)
+
+
+DROP TABLE dbo.TableInHeap
+
 GO
 
 
@@ -39,7 +63,7 @@ BEGIN
 END
 GO
 
-EXEC ShowInfo_TableInHeap;
+EXEC ShowInfo_TableInHeap
 
 
 
@@ -47,27 +71,25 @@ EXEC ShowInfo_TableInHeap;
 
 
 
-INSERT INTO TableInHeap (Id, Filler1, Filler2)
-VALUES (1, 'a', 'b'); 
+INSERT TableInHeap VALUES (1, 'a', 'b') 
 
-EXEC ShowInfo_TableInHeap;
-
+EXEC ShowInfo_TableInHeap
 
 
 
 
 
 
-DECLARE @i AS int = 1;
+
+DECLARE @i AS int = 1
 WHILE @i < 30
 BEGIN
-	SET @i = @i + 1;
-	INSERT INTO TableInHeap (Id, Filler1, Filler2)
-	VALUES (@i, 'a', 'b');
+	SET @i = @i + 1
+	INSERT TableInHeap VALUES (@i, 'a', 'b')
 END
 
 
-EXEC ShowInfo_TableInHeap;
+EXEC ShowInfo_TableInHeap
  
 
 
@@ -77,11 +99,10 @@ EXEC ShowInfo_TableInHeap;
 
 
 
-INSERT INTO TableInHeap (Id, Filler1, Filler2)
-VALUES (31, 'a', 'b'); 
+INSERT TableInHeap VALUES (31, 'a', 'b')
 
 
-EXEC ShowInfo_TableInHeap;
+EXEC ShowInfo_TableInHeap
 GO
 
 
@@ -91,18 +112,19 @@ GO
 
 
 
-DECLARE @i AS int = 31;
-WHILE @i < 3000000
+DECLARE @i AS int = 1000000
+WHILE @i < 1100000
 BEGIN
-	SET @i = @i + 1;
-	INSERT INTO TableInHeap (Id, Filler1, Filler2)
-	VALUES (@i, 'a', 'b');
-END; 
+	SET @i = @i + 1
+	INSERT TableInHeap VALUES (@i, 'a', 'b')
+END
 
 
 
+
+-- 352
 SELECT * FROM TableInHeap
-WHERE Id = 150000;
+WHERE Id = 900000
 
 
 
@@ -113,7 +135,14 @@ WHERE Id = 150000;
 
 CREATE CLUSTERED INDEX Index1 
 ON TableInHeap (Id)
-	
 
+
+
+CREATE NONCLUSTERED INDEX Index2
+ON TableInHeap (Filler2)
+
+
+
+-- 27
 SELECT * FROM TableInHeap
-WHERE Id = 150000
+WHERE Id = 900000
